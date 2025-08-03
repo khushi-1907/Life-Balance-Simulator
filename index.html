@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Balance Calculator - Find Your Perfect (Hilarious) Balance!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0px #fff;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #5f27cd;
+            margin-bottom: 30px;
+        }
+
+        .balance-meter {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .meter-item {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 20px;
+            width: 180px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .meter-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+
+        .meter-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .love-icon { color: #ff6b6b; }
+        .friends-icon { color: #48dbfb; }
+        .money-icon { color: #feca57; }
+        .car-icon { color: #ff9ff3; }
+
+        .meter-label {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .meter-slider {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+            margin-bottom: 10px;
+        }
+
+        .meter-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .love-slider::-webkit-slider-thumb { background: #ff6b6b; }
+        .friends-slider::-webkit-slider-thumb { background: #48dbfb; }
+        .money-slider::-webkit-slider-thumb { background: #feca57; }
+        .car-slider::-webkit-slider-thumb { background: #ff9ff3; }
+
+        .meter-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .result-container {
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 25px;
+            color: white;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .result-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .result-description {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .character {
+            font-size: 8rem;
+            margin: 20px 0;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #48dbfb;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #5f27cd;
+        }
+
+        .floating-hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255, 107, 107, 0.3);
+            animation: float-up 10s linear infinite;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .balance-meter {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .meter-item {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .character {
+                font-size: 6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="floatingHearts"></div>
+    
+    <div class="container">
+        <h1>Life Balance Calculator</h1>
+        <p class="subtitle">Find your perfect (hilarious) balance between love, friends, money, and cars!</p>
+        
+        <div class="character" id="character">🤔</div>
+        
+        <div class="balance-meter">
+            <div class="meter-item">
+                <div class="meter-icon love-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="meter-label">Love</div>
+                <input type="range" min="0" max="100" value="50" class="meter-slider love-slider" id="loveSlider">
+                <div class="meter-value" id="loveValue">50%</div>
+            </div>
+            
+            <div class="meter-item">
+                <div class="meter-icon friends-icon">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <div class="meter-label">Friends</div>
+                <input type="range" min="0" max="100" value="50" class="meter-slider friends-slider" id="friendsSlider">
+                <div class="meter-value" id="friendsValue">50%</div>
+            </div>
+            
+            <div class="meter-item">
+                <div class="meter-icon money-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="meter-label">Money</div>
+                <input type="range" min="0" max="100" value="50" class="meter-slider money-slider" id="moneySlider">
+                <div class="meter-value" id="moneyValue">50%</div>
+            </div>
+            
+            <div class="meter-item">
+                <div class="meter-icon car-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="meter-label">Cars</div>
+                <input type="range" min="0" max="100" value="50" class="meter-slider car-slider" id="carSlider">
+                <div class="meter-value" id="carValue">50%</div>
+            </div>
+        </div>
+        
+        <div class="result-container" id="resultContainer">
+            <div class="result-title" id="resultTitle">Balanced Life</div>
+            <div class="result-description" id="resultDescription">
+                You're perfectly balanced! Like a pizza with all toppings. You might be boring, but at least you're stable!
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button class="btn btn-primary" id="randomizeBtn">
+                <i class="fas fa-dice"></i> Randomize My Life!
+            </button>
+            <button class="btn btn-secondary" id="shareBtn">
+                <i class="fas fa-share-alt"></i> Share My Balance
+            </button>
+        </div>
+        
+        <div class="footer">
+            Warning: This calculator is 100% accurate for entertainment purposes only! 🎭
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const loveSlider = document.getElementById('loveSlider');
+        const friendsSlider = document.getElementById('friendsSlider');
+        const moneySlider = document.getElementById('moneySlider');
+        const carSlider = document.getElementById('carSlider');
+        
+        const loveValue = document.getElementById('loveValue');
+        const friendsValue = document.getElementById('friendsValue');
+        const moneyValue = document.getElementById('moneyValue');
+        const carValue = document.getElementById('carValue');
+        
+        const character = document.getElementById('character');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultDescription = document.getElementById('resultDescription');
+        const randomizeBtn = document.getElementById('randomizeBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const floatingHearts = document.getElementById('floatingHearts');
+
+        // Life balance profiles
+        const lifeProfiles = {
+            loveGuru: {
+                title: "Love Guru 💕",
+                description: "You're swimming in love! Your heart is so full it might burst! Just remember to pay your bills occasionally.",
+                character: "😍",
+                condition: (l, f, m, c) => l > 70 && l > f && l > m && l > c
+            },
+            socialButterfly: {
+                title: "Social Butterfly 🦋",
+                description: "You're the life of every party! Your friends love you... but your phone battery doesn't. Time to recharge?",
+                character: "🤩",
+                condition: (l, f, m, c) => f > 70 && f > l && f > m && f > c
+            },
+            moneyBags: {
+                title: "Money Bags 💰",
+                description: "Cha-ching! You're rolling in dough! Just remember you can't take it with you... unless you buy a really big coffin.",
+                character: "🤑",
+                condition: (l, f, m, c) => m > 70 && m > l && m > f && m > c
+            },
+            carEnthusiast: {
+                title: "Car Enthusiast 🏎️",
+                description: "Vroom vroom! You live life in the fast lane! Your car has more friends than you do. Maybe time to socialize?",
+                character: "🏁",
+                condition: (l, f, m, c) => c > 70 && c > l && c > f && c > m
+            },
+            loveMoneyCombo: {
+                title: "Romantic Capitalist 💕💰",
+                description: "You've got love and money! You're basically a Disney prince/princess with a stock portfolio. Impressive!",
+                character: "🤵‍💰",
+                condition: (l, f, m, c) => l > 60 && m > 60 && f < 50 && c < 50
+            },
+            friendCarCombo: {
+                title: "Road Trip Buddy 🚗👥",
+                description: "You and your friends are always on the go! Your car's GPS has more saved locations than your brain has memories!",
+                character: "🚐",
+                condition: (l, f, m, c) => f > 60 && c > 60 && l < 50 && m < 50
+            },
+            balanced: {
+                title: "Perfectly Balanced ⚖️",
+                description: "You're like a well-made smoothie - a little bit of everything! Boring but nutritious. Keep it up!",
+                character: "😊",
+                condition: (l, f, m, c) => {
+                    const avg = (l + f + m + c) / 4;
+                    return Math.abs(l - avg) < 20 && Math.abs(f - avg) < 20 && 
+                           Math.abs(m - avg) < 20 && Math.abs(c - avg) < 20;
+                }
+            },
+            chaotic: {
+                title: "Chaotic Neutral 🎲",
+                description: "Your life is like a tornado in a thrift store - messy but interesting! Embrace the chaos!",
+                character: "🤪",
+                condition: (l, f, m, c) => {
+                    const values = [l, f, m, c];
+                    const max = Math.max(...values);
+                    const min = Math.min(...values);
+                    return max - min > 60;
+                }
+            },
+            minimalist: {
+                title: "Minimalist Master 🧘",
+                description: "You need nothing! Or maybe you need therapy? Either way, you're zen as heck!",
+                character: "🧘‍♂️",
+                condition: (l, f, m, c) => l < 30 && f < 30 && m < 30 && c < 30
+            },
+            overachiever: {
+                title: "Overachiever 🏆",
+                description: "You want it ALL! Love, friends, money, cars! Your ambition is impressive... and slightly terrifying!",
+                character: "🤯",
+                condition: (l, f, m, c) => l > 80 && f > 80 && m > 80 && c > 80
+            },
+            // NEW PROFILES ADDED BELOW
+            workaholic: {
+                title: "Workaholic 💼",
+                description: "You work so hard your bed is just a desk! Your money is growing but your social life is shrinking. Time for a vacation?",
+                character: "😴",
+                condition: (l, f, m, c) => m > 75 && l < 30 && f < 30 && c < 30
+            },
+            partyAnimal: {
+                title: "Party Animal 🎉",
+                description: "Your liver is crying but your friends are cheering! You live for the weekend... and the recovery time!",
+                character: "🥳",
+                condition: (l, f, m, c) => f > 75 && c > 50 && l < 40 && m < 40
+            },
+            goldDigger: {
+                title: "Gold Digger 💍",
+                description: "You're not looking for love, you're looking for a lifestyle! Your heart beats for dollar signs!",
+                character: "💎",
+                condition: (l, f, m, c) => l > 70 && m > 70 && f < 30 && c < 30
+            },
+            carCollector: {
+                title: "Car Collector 🏎️",
+                description: "Your garage is bigger than your house! You have more cars than friends. At least your cars don't talk back!",
+                character: "🚗",
+                condition: (l, f, m, c) => c > 80 && l < 30 && f < 30 && m < 30
+            },
+            lonelyMillionaire: {
+                title: "Lonely Millionaire 😢",
+                description: "You're rich but your heart is empty! Money can't buy happiness, but it can buy a therapist!",
+                character: "💸",
+                condition: (l, f, m, c) => m > 80 && l < 20 && f < 20 && c < 20
+            },
+            familyPerson: {
+                title: "Family Person 👨‍👩‍👧‍👦",
+                description: "Love and friends are your everything! Your wallet might be empty but your heart is full. Time to start a family band?",
+                character: "👨‍👩‍👧‍👦",
+                condition: (l, f, m, c) => l > 70 && f > 70 && m < 30 && c < 30
+            },
+            adventureJunkie: {
+                title: "Adventure Junkie 🧗‍♀️",
+                description: "You're always on the move! Your friends and car are your partners in crime. Next stop: everywhere!",
+                character: "🗺️",
+                condition: (l, f, m, c) => f > 60 && c > 60 && l < 40 && m < 40
+            },
+            loveStruckBroke: {
+                title: "Love Struck & Broke 💔",
+                description: "Love is expensive! You're broke but your heart is full. Maybe your partner can pay for dinner?",
+                character: "💑",
+                condition: (l, f, m, c) => l > 75 && m < 25 && f < 40 && c < 40
+            },
+            socialClimber: {
+                title: "Social Climber 📈",
+                description: "You're climbing the social ladder with your rich friends! Just don't look down... it's a long way to the bottom!",
+                character: "🧗‍♀️",
+                condition: (l, f, m, c) => f > 70 && m > 60 && l < 30 && c < 30
+            },
+            luxuryLover: {
+                title: "Luxury Lover 💎",
+                description: "You love the finer things in life! Your car costs more than some houses. Remember: diamonds are a girl's best friend!",
+                character: "🛥️",
+                condition: (l, f, m, c) => m > 70 && c > 70 && l < 30 && f < 30
+            },
+            default: {
+                title: "Life Explorer 🗺️",
+                description: "You're still figuring it out! That's cool! Life's a journey, not a destination... unless you're in a car!",
+                character: "🤔",
+                condition: () => true
+            }
+        };
+
+        // Update function
+        function updateBalance() {
+            const love = parseInt(loveSlider.value);
+            const friends = parseInt(friendsSlider.value);
+            const money = parseInt(moneySlider.value);
+            const car = parseInt(carSlider.value);
+            
+            // Update value displays
+            loveValue.textContent = `${love}%`;
+            friendsValue.textContent = `${friends}%`;
+            moneyValue.textContent = `${money}%`;
+            carValue.textContent = `${car}%`;
+            
+            // Find matching profile
+            let matchedProfile = lifeProfiles.default;
+            for (const [key, profile] of Object.entries(lifeProfiles)) {
+                if (profile.condition(love, friends, money, car)) {
+                    matchedProfile = profile;
+                    break;
+                }
+            }
+            
+            // Update display
+            character.textContent = matchedProfile.character;
+            resultTitle.textContent = matchedProfile.title;
+            resultDescription.textContent = matchedProfile.description;
+            
+            // Create floating hearts if love is high
+            if (love > 70) {
+                createFloatingHeart();
+            }
+        }
+
+        // Create floating heart animation
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 7) + 's';
+            floatingHearts.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 10000);
+        }
+
+        // Randomize function
+        function randomizeValues() {
+            loveSlider.value = Math.floor(Math.random() * 101);
+            friendsSlider.value = Math.floor(Math.random() * 101);
+            moneySlider.value = Math.floor(Math.random() * 101);
+            carSlider.value = Math.floor(Math.random() * 101);
+            updateBalance();
+        }
+
+        // Share function
+        function shareBalance() {
+            const love = loveSlider.value;
+            const friends = friendsSlider.value;
+            const money = moneySlider.value;
+            const car = carSlider.value;
+            
+            const text = `My Life Balance: Love ${love}%, Friends ${friends}%, Money ${money}%, Cars ${car}%! What's yours?`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Life Balance',
+                    text: text,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback - copy to clipboard
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Balance copied to clipboard!');
+                });
+            }
+        }
+
+        // Event listeners
+        loveSlider.addEventListener('input', updateBalance);
+        friendsSlider.addEventListener('input', updateBalance);
+        moneySlider.addEventListener('input', updateBalance);
+        carSlider.addEventListener('input', updateBalance);
+        randomizeBtn.addEventListener('click', randomizeValues);
+        shareBtn.addEventListener('click', shareBalance);
+
+        // Initialize
+        updateBalance();
+    </script>
+</body>
+</html>
